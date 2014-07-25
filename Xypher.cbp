@@ -13,7 +13,23 @@
 				<Option compiler="null" />
 			</Target>
 		</Build>
+		<Unit filename="loader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="make.bat" />
+		<Unit filename="mikedev.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
+			<DoxyBlocks>
+				<comment_style block="4" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 			<code_completion />
 			<envvars />
 			<debugger />

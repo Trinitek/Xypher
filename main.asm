@@ -1,0 +1,2 @@
+
+%include "obj\loader.asm"
