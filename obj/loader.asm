@@ -11,7 +11,7 @@ db '===========================',CR,LF
 db 'Xypher Windowing API Loader',CR,LF
 db '===========================',CR,LF
 db 'Version 1.0',CR,LF
-db 'Copyright (c) 2014 Blake Burgess',CR,LF,0
+db 'Copyright (c) 2014 Blake Burgess',CR,LF,CR,LF,0
 ; glb alreadyInstalled : [0u] char
 _alreadyInstalled:
 ; =
@@ -19,19 +19,26 @@ _alreadyInstalled:
 ; Expanded expression: "L1 "
 L1:
 	db	"Xypher is already in memory.",13,10,0
-; glb success : [0u] char
-_success:
+; glb loaded : [0u] char
+_loaded:
 ; =
 ; RPN'ized expression: "L3 "
 ; Expanded expression: "L3 "
 L3:
-	db	"Xypher successfully loaded. Hooked into interrupt 0x45.",13,10,0
+	db	"Xypher successfully loaded at segment 0x",0
+; glb hooked : [0u] char
+_hooked:
+; =
+; RPN'ized expression: "L5 "
+; Expanded expression: "L5 "
+L5:
+	db	13,10,"Hooked into interrupt 0x45.",13,10,0
 ; glb main : (void) void
 _main:
 	push	bp
 	mov	bp, sp
-	jmp	L6
-L5:
+	jmp	L8
+L7:
 ; RPN'ized expression: "( greeting &u 1 + os_printString ) "
 ; Expanded expression: " greeting 1 +  os_printString ()2 "
 ; Fused expression:    "( + greeting 1 , os_printString )2 "
@@ -54,7 +61,7 @@ jmp .absent
 	call	_os_printString
 	sub	sp, -2
 ; return
-	jmp	L7
+	jmp	L9
 .absent:
 push es
 mov dx, ds
@@ -65,6 +72,14 @@ mov si, intHandler
 mov cx, eof - intHandler
 rep movsb
 
+; RPN'ized expression: "( loaded &u os_printString ) "
+; Expanded expression: " loaded  os_printString ()2 "
+; Fused expression:    "( loaded , os_printString )2 "
+	push	_loaded
+	call	_os_printString
+	sub	sp, -2
+mov ax, dx
+call os_print_4hex
 cli
 xor ax, ax
 mov es, ax
@@ -73,23 +88,22 @@ stosw
 mov ax, dx
 stosw
 sti
-
 pop es
-; RPN'ized expression: "( success &u os_printString ) "
-; Expanded expression: " success  os_printString ()2 "
-; Fused expression:    "( success , os_printString )2 "
-	push	_success
+; RPN'ized expression: "( hooked &u os_printString ) "
+; Expanded expression: " hooked  os_printString ()2 "
+; Fused expression:    "( hooked , os_printString )2 "
+	push	_hooked
 	call	_os_printString
 	sub	sp, -2
 ; return
-	jmp	L7
+	jmp	L9
 ; Fused expression:    "0 "
 	mov	ax, 0
-L7:
+L9:
 	leave
 	ret
-L6:
-	jmp	L5
+L8:
+	jmp	L7
 %include 'mikedev.inc'
 ; glb os_printString : (
 ; prm     stringPtr : * char
@@ -97,19 +111,19 @@ L6:
 _os_printString:
 	push	bp
 	mov	bp, sp
-	jmp	L10
-L9:
+	jmp	L12
+L11:
 ; loc     stringPtr : (@4): * char
 mov si, [bp + 4]
 call os_print_string
-L11:
+L13:
 	leave
 	ret
-L10:
-	jmp	L9
+L12:
+	jmp	L11
 
 ; Syntax/declaration table/stack:
-; Bytes used: 272/20736
+; Bytes used: 312/20736
 
 
 ; Macro table:
@@ -122,12 +136,13 @@ L10:
 ; Identifier table:
 ; Ident greeting
 ; Ident alreadyInstalled
-; Ident success
+; Ident loaded
+; Ident hooked
 ; Ident main
 ; Ident <something>
 ; Ident os_printString
 ; Ident stringPtr
-; Bytes used: 83/4752
+; Bytes used: 90/4752
 
-; Next label number: 13
+; Next label number: 15
 ; Compilation succeeded.

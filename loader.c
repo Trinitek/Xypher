@@ -12,11 +12,13 @@ char greeting;
     asm("db 'Xypher Windowing API Loader',CR,LF");
     asm("db '===========================',CR,LF");
     asm("db 'Version 1.0',CR,LF");
-    asm("db 'Copyright (c) 2014 Blake Burgess',CR,LF,0");
+    asm("db 'Copyright (c) 2014 Blake Burgess',CR,LF,CR,LF,0");
 char alreadyInstalled[] =
     "Xypher is already in memory.\r\n";
-char success[] =
-    "Xypher successfully loaded. Hooked into interrupt 0x45.\r\n";
+char loaded[] =
+    "Xypher successfully loaded at segment 0x";
+char hooked[] =
+    "\r\nHooked into interrupt 0x45.\r\n";
 
 /* Main program */
 void main(void) {
@@ -49,6 +51,11 @@ void main(void) {
             "mov cx, eof - intHandler\n"
             "rep movsb\n");
 
+        os_printString(&loaded);
+
+        asm("mov ax, dx\n"
+            "call os_print_4hex");
+
         // Hook into interrupt 0x45
         asm("cli\n"             // disable interrupts
             "xor ax, ax\n"
@@ -57,23 +64,11 @@ void main(void) {
             "stosw\n"           // offset goes in first
             "mov ax, dx\n"
             "stosw\n"           // segment goes in second
-            "sti\n");           // re-enable interrupts
+            "sti\n"             // re-enable interrupts
+            "pop es");
 
-        // Setup Xypher environment variables
-        /*asm("mov ah, 0x02\n"
-            "mov bx, ds\n"      // BX = userspace segment
-            "mov cx, dx\n"      // CX = Xypher segment
-            "int 0x45\n"
-            "pop es");*/
+        os_printString(&hooked);
 
-        /*asm("mov ah, 0x03\n"
-            "int 0x45\n"
-            "call os_dump_registers");*/
-
-        asm("pop es");
-
-        // Done!
-        os_printString(&success);
         return;
 }
 
@@ -84,4 +79,3 @@ void os_printString(char *stringPtr) {
     asm("mov si, [bp + 4]\n"
         "call os_print_string");
 }
-

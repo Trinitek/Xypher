@@ -24,10 +24,6 @@ macro break {
 jmp     parseIntNumber
 
 ;; Global data ;;
-userspaceSeg:
-        dw 0
-handlerSeg:
-        dw 0
 
 ;; Main code ;;
 parseIntNumber:
@@ -45,22 +41,12 @@ parseIntNumber:
         mov     al, version
         break
 
-    ; Initialize environment variables
-    ; PARAM:
-    ; bx = userspace segment
-    ; cx = Xypher segment
+    ; Get resident segment
+    ; RETURN:
+    ; ax = Xypher segment
     case 0x02
-        mov     [userspaceSeg], bx
-        mov     [handlerSeg], cx
-        break
-
-    ; Get environment variables
-    ; PARAM:
-    ; ax = userspace segment
-    ; bx = Xypher segment
-    case 0x03
-        mov     ax, [userspaceSeg]
-        mov     bx, [handlerSeg]
+        push    cs
+        pop     ax
         break
 
     @@:
