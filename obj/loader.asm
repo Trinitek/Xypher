@@ -4,7 +4,6 @@ bits 16
 %define LF 0x0A
 org 32768
 jmp _main
-; glb isInstalled : (void) char
 ; glb greeting : char
 _greeting:
 	times	1 db 0
@@ -65,8 +64,7 @@ xor di, di
 mov si, intHandler
 mov cx, eof - intHandler
 rep movsb
-pop es
-push es
+
 cli
 xor ax, ax
 mov es, ax
@@ -75,6 +73,7 @@ stosw
 mov ax, dx
 stosw
 sti
+
 pop es
 ; RPN'ized expression: "( success &u os_printString ) "
 ; Expanded expression: " success  os_printString ()2 "
@@ -110,7 +109,7 @@ L10:
 	jmp	L9
 
 ; Syntax/declaration table/stack:
-; Bytes used: 320/20736
+; Bytes used: 272/20736
 
 
 ; Macro table:
@@ -121,15 +120,14 @@ L10:
 
 
 ; Identifier table:
-; Ident isInstalled
-; Ident <something>
 ; Ident greeting
 ; Ident alreadyInstalled
 ; Ident success
 ; Ident main
+; Ident <something>
 ; Ident os_printString
 ; Ident stringPtr
-; Bytes used: 96/4752
+; Bytes used: 83/4752
 
 ; Next label number: 13
 ; Compilation succeeded.

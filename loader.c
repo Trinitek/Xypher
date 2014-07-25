@@ -1,12 +1,12 @@
 
+/* Macros and directives */
 asm("%define CR 0x0D");
 asm("%define LF 0x0A");
 
 asm("org 32768");
 asm("jmp _main");
 
-char isInstalled(void);
-
+/* Global data */
 char greeting;
     asm("db '===========================',CR,LF");
     asm("db 'Xypher Windowing API Loader',CR,LF");
@@ -18,6 +18,7 @@ char alreadyInstalled[] =
 char success[] =
     "Xypher successfully loaded. Hooked into interrupt 0x45.\r\n";
 
+/* Main program */
 void main(void) {
     // Display greeting message
     os_printString(&greeting + 1);
@@ -46,23 +47,41 @@ void main(void) {
             "xor di, di\n"
             "mov si, intHandler\n"
             "mov cx, eof - intHandler\n"
-            "rep movsb\n"
-            "pop es");
+            "rep movsb\n");
 
         // Hook into interrupt 0x45
-        asm("push es\n"
-            "cli\n"             // disable interrupts
+        asm("cli\n"             // disable interrupts
             "xor ax, ax\n"
             "mov es, ax\n"
             "mov di, 0x114\n"   // interrupt number * 4
             "stosw\n"           // offset goes in first
             "mov ax, dx\n"
             "stosw\n"           // segment goes in second
-            "sti\n"             // re-enable interrupts
-            "pop es");
+            "sti\n");           // re-enable interrupts
+
+        // Setup Xypher environment variables
+        /*asm("mov ah, 0x02\n"
+            "mov bx, ds\n"      // BX = userspace segment
+            "mov cx, dx\n"      // CX = Xypher segment
+            "int 0x45\n"
+            "pop es");*/
+
+        /*asm("mov ah, 0x03\n"
+            "int 0x45\n"
+            "call os_dump_registers");*/
+
+        asm("pop es");
+
         // Done!
         os_printString(&success);
         return;
 }
 
-#include "mikedev.c"
+/* System functions */
+asm("%include 'mikedev.inc'");
+
+void os_printString(char *stringPtr) {
+    asm("mov si, [bp + 4]\n"
+        "call os_print_string");
+}
+
