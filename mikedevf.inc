@@ -5,29 +5,29 @@
 ; ------------------------------------------------------------------
 ; IMPORTANT LOCATIONS
 
-os_main			equ	0000h	; Where the OS code starts
+os_main             equ	0000h	; Where the OS code starts
 
 
 ; ------------------------------------------------------------------
 ; COLOURS (eg for os_draw_background and os_draw_block)
 
-%DEFINE BLACK_ON_WHITE		11110000b
-%DEFINE WHITE_ON_BLACK		00001111b
-%DEFINE WHITE_ON_LIGHT_RED	11001111b
-%DEFINE WHITE_ON_GREEN		00101111b
-%DEFINE RED_ON_LIGHT_GREEN	10100100b
+BLACK_ON_WHITE      equ 11110000b
+WHITE_ON_BLACK      equ 00001111b
+WHITE_ON_LIGHT_RED  equ 11001111b
+WHITE_ON_GREEN      equ 00101111b
+RED_ON_LIGHT_GREEN  equ 10100100b
 
 
 ; ------------------------------------------------------------------
 ; KEYS
 
-%DEFINE KEY_UP		72
-%DEFINE KEY_DOWN	80
-%DEFINE KEY_LEFT	75
-%DEFINE KEY_RIGHT	77
+KEY_UP              equ 72
+KEY_DOWN            equ 80
+KEY_LEFT            equ 75
+KEY_RIGHT           equ 77
 
-%DEFINE KEY_ESC		27
-%DEFINE KEY_ENTER	13
+KEY_ESC             equ 27
+KEY_ENTER           equ 13
 
 
 ; ------------------------------------------------------------------
@@ -145,7 +145,7 @@ os_get_via_serial	equ	0063h	; Returns AL = byte received
 os_run_basic		equ	00C6h	; AX = code location in RAM, BX = size,
 					; SI = parameter string (or 0 if none)
 os_get_api_version	equ	0057h	; Returns API version in AL
-os_pause		equ	0024h	; AX = 10ths of second to wait
+os_pause            equ	0024h	; AX = 10ths of second to wait
 os_fatal_error		equ	0027h	; AX = error string location
 
 
