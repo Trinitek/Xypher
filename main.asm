@@ -1,8 +1,8 @@
 
-%include "obj\loader.asm"
+loader:
+include 'loader.asm'
 
-; The interrupt handler must be compiled with FASM
+; Interrupt handler must be assembled separately
 intHandler:
-incbin "obj\interrupt.bin"
-
-eof:
+file 'obj\interrupt.bin'
+.end:
