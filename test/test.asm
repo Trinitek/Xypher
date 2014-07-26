@@ -85,7 +85,4 @@ main:
         os_print4hex ax
         os_printNewline
 
-        mov ax, fatalError
-        call os_fatal_error
-
     return

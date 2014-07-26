@@ -6,9 +6,6 @@
 ;; Directives ;;
 org     0x0
 
-;; Global constants ;;
-version equ 1
-
 ;; Macros ;;
 macro case interrupt {
     @@:
@@ -38,7 +35,7 @@ parseIntNumber:
     ; RETURN:
     ; al = version
     case 0x01
-        mov     al, version
+        mov     al, VERSION
         break
 
     ; Get resident segment
