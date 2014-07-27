@@ -1,6 +1,8 @@
 
+@echo ============================================================
+
 @rem Interrupt handler must be assembled separately
-fasm interrupt.asm obj\interrupt.bin
+fasm xypher.asm obj\xypher.bin
 
 @rem Main program file
 fasm main.asm bin\xypher.bin
