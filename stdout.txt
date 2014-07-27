@@ -7,3 +7,24 @@ One joystick reported, initializing with 4axis
 Using joystick Razer Nostromo with 6 axes, 24 buttons and 1 hat(s)
 Loaded disk 0 from swaplist position 0 - "mikeos.img"
 Loaded disk 1 from swaplist position 0 - "mikeos.img"
+CPU speed: fixed 2499 cycles.
+CPU speed: fixed 2082 cycles.
+CPU speed: fixed 1734 cycles.
+CPU speed: fixed 1444 cycles.
+CPU speed: fixed 1203 cycles.
+CPU speed: fixed 1002 cycles.
+CPU speed: fixed 834 cycles.
+CPU speed: fixed 694 cycles.
+CPU speed: fixed 578 cycles.
+CPU speed: fixed 481 cycles.
+CPU speed: fixed 400 cycles.
+CPU speed: fixed 333 cycles.
+CPU speed: fixed 277 cycles.
+CPU speed: fixed 230 cycles.
+CPU speed: fixed 191 cycles.
+CPU speed: fixed 159 cycles.
+CPU speed: fixed 132 cycles.
+CPU speed: fixed 109 cycles.
+CPU speed: fixed 90 cycles.
+CPU speed: fixed 74 cycles.
+C

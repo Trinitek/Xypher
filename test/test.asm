@@ -30,6 +30,8 @@ macro os_intToString reg {
     call    os_int_to_string
 }
 
+macro os_clearScreen { call os_clear_screen }
+
 ;; Entry point ;;
 jmp     main
 
@@ -44,8 +46,8 @@ version:
         db "Version: ",0
 xypherSeg:
         db "Segment: 0x",0
-fatalError:
-        db "This is a fatal error.",0
+testString:
+        db "TEST",0
 
 ;; Main program ;;
 main:
@@ -84,5 +86,69 @@ main:
 
         os_print4hex ax
         os_printNewline
+
+    displayFilledBoxes:
+        os_waitForKey
+
+        ; Plot 10x6 box at (1,2) with color (black on l_gray)
+        mov     ah, 0x03
+        mov     al, 0x70
+        mov     bh, 10
+        mov     bl, 6
+        mov     ch, 1
+        mov     cl, 2
+        int     0x45
+
+        os_printString testString
+
+        ; Plot 20x15 box at (40,23) with color (white on red)
+        ; The lower half of the box should clip off the bottom of the screen
+        mov     ah, 0x03
+        mov     al, 0x4F
+        mov     bh, 20
+        mov     bl, 15
+        mov     ch, 40
+        mov     cl, 23
+        int     0x45
+
+        os_printString testString
+
+        ; Plot 20x15 box at (65,8) with color (white on blue)
+        ; The right half of the box should clip off the side of the screen
+        mov     ah, 0x03
+        mov     al, 0x1F
+        mov     bh, 20
+        mov     bl, 15
+        mov     ch, 65
+        mov     cl, 8
+        int     0x45
+
+        os_printString testString
+
+        ; Plot 30x10 box at (25,5) with color (black on yellow)
+        mov     ah, 0x03
+        mov     al, 0xE0
+        mov     bh, 30
+        mov     bl, 10
+        mov     ch, 25
+        mov     cl, 5
+        int     0x45
+
+        os_printString testString
+
+        ; Plot a 4x2 box at (0,0) with color (black on aqua)
+        mov     ah, 0x03
+        mov     al, 0xB0
+        mov     bh, 4
+        mov     bl, 2
+        mov     ch, 0
+        mov     cl, 0
+        int     0x45
+
+        os_printString testString
+
+        os_waitForKey
+
+        os_clearScreen
 
     return
