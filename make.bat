@@ -2,10 +2,10 @@
 @echo ============================================================
 
 @rem Interrupt handler must be assembled separately
-fasm xypher.asm obj\xypher.bin
+fasm src\xypher.asm obj\xypher.bin
 
 @rem Main program file
-fasm main.asm bin\xypher.bin
+fasm src\main.asm bin\xypher.bin
 
 @rem Test program file
 fasm test\test.asm bin\test.bin

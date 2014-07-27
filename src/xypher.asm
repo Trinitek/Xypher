@@ -25,4 +25,3 @@ include 'draw.asm'
 
 ; Window functions
 include 'window.asm'
-

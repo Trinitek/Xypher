@@ -1,7 +1,7 @@
 
 ;; Directives ;;
 org     32768
-include 'mikedevf.inc'
+include 'src\mikedevf.inc'
 
 ;; Global constants ;;
 CR      equ 0x0D

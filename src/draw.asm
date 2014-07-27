@@ -11,7 +11,7 @@
 ;   cl = yPos
 draw_drawBox:
     pusha
-
+    
     ; if (xPos > SCREEN_WIDTH_MAX) then exit
     .checkXpos:
         cmp     ch, SCREEN_WIDTH_MAX
