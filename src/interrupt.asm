@@ -54,7 +54,7 @@ parseIntNumber:
     ;   ch = xPos
     ;   cl = yPos
     case 0x03
-        call    draw_drawBox
+        call    draw_drawFilledBox
         break
 
     @@:

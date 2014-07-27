@@ -1,7 +1,7 @@
 
 ; Drawing functions
 
-; 'draw_drawBox'
+; 'draw_drawFilledBox'
 ; Draws a filled box on the screen
 ; PARAM:
 ;   al = color
@@ -9,7 +9,7 @@
 ;   bl = height
 ;   ch = xPos
 ;   cl = yPos
-draw_drawBox:
+draw_drawFilledBox:
     pusha
     
     ; if (xPos > SCREEN_WIDTH_MAX) then exit
