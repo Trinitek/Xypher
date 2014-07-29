@@ -56,6 +56,16 @@ parseIntNumber:
     case 0x03
         call    draw_drawFilledBox
         break
+    
+    ; Draw a horizontal line on the screen
+    ; PARAM:
+    ; al = color
+    ; cl = length
+    ; dl = xPos
+    ; dh = yPos
+    case 0x04
+        call    draw_drawLineHoriz
+        break
 
     @@:
     break

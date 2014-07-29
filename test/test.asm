@@ -98,7 +98,6 @@ main:
         mov     ch, 1
         mov     cl, 2
         int     0x45
-
         os_printString testString
 
         ; Plot 20x15 box at (40,23) with color (white on red)
@@ -110,7 +109,6 @@ main:
         mov     ch, 40
         mov     cl, 23
         int     0x45
-
         os_printString testString
 
         ; Plot 20x15 box at (65,8) with color (white on blue)
@@ -122,7 +120,6 @@ main:
         mov     ch, 65
         mov     cl, 8
         int     0x45
-
         os_printString testString
 
         ; Plot 30x10 box at (25,5) with color (black on yellow)
@@ -133,7 +130,6 @@ main:
         mov     ch, 25
         mov     cl, 5
         int     0x45
-
         os_printString testString
 
         ; Plot a 4x2 box at (0,0) with color (black on aqua)
@@ -144,11 +140,51 @@ main:
         mov     ch, 0
         mov     cl, 0
         int     0x45
-
         os_printString testString
-
+        
         os_waitForKey
-
         os_clearScreen
+    
+    .displayHorizontalLines:
+        ; Plot a 40 long line at (1,2) with color (black on l_gray)
+        mov     ah, 0x04
+        mov     al, 0x70
+        mov     dl, 1
+        mov     dh, 2
+        mov     cl, 40
+        int     0x45
+        os_printString testString
+        
+        ; Plot a 10 long line at (45, 18) with color (white on red)
+        mov     ah, 0x04
+        mov     al, 0x4F
+        mov     dl, 45
+        mov     dh, 18
+        mov     cl, 10
+        int     0x45
+        os_printString testString
+        
+        ; Plot a 15 long line at (72, 15) with color (white on blue)
+        mov     ah, 0x04
+        mov     al, 0x1F
+        mov     dl, 72
+        mov     dh, 15
+        mov     cl, 15
+        int     0x45
+        os_printString testString
+        
+        ; Plot a 4 long line at (0, 0) with color (black on yellow)
+        mov     ah, 0x04
+        mov     al, 0xE0
+        mov     dl, 0
+        mov     dh, 0
+        mov     cl, 4
+        int     0x45
+        os_printString testString
+        
+        os_waitForKey
+        os_clearScreen
+    
+    .displayVerticalLines:
 
     return

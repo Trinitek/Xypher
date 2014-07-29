@@ -71,7 +71,7 @@ draw_drawFilledBox:
             mov     cl, bh      ; Iterate for (width) times
             mov     ah, 0x09    ; Mode number
             mov     bl, al      ; Attribute
-            mov     bh, 0x00    ; Page number = 0
+            mov     bh, 0       ; Page number = 0
             mov     al, 0x00    ; Display null char
             int     0x10
             popa
@@ -91,11 +91,63 @@ draw_drawFilledBox:
     .proc_setCursorPosition:
         pusha
         mov     ah, 0x02    ; Mode number
-        mov     bh, 0x00    ; Page number = 0
+        mov     bh, 0       ; Page number = 0
         int     0x10
         popa
         ret
 
+    .end:
+        popa
+        ret
+
+; 'draw_drawLineHoriz'
+; Draws a vertical line from an origin point on the leftmost side
+; al = color
+; cl = length
+; dl = xPos
+; dh = yPos
+draw_drawLineHoriz:
+    pusha
+        
+    ; if (xPos > SCREEN_WIDTH_MAX) then exit
+    .checkXpos:
+        cmp     dl, SCREEN_WIDTH_MAX
+        ja      .end
+    
+    ; if (yPos > SCREEN_HEIGHT_MAX) then exit
+    .checkYpos:
+        cmp     dh, SCREEN_HEIGHT_MAX
+        ja      .end
+    
+    ; if (width+xPos > SCREEN_WIDTH) then resize
+    .checkWidth:
+        xor     bx, bx
+        mov     bl, cl
+        push    dx
+        mov     dh, 0
+        add     bx, dx
+        pop     dx
+        cmp     bx, SCREEN_WIDTH
+        jb      @f
+        
+        ; width = width - (total - SCREEN_WIDTH)
+        sub     bx, SCREEN_WIDTH
+        sub     cl, bl
+        @@:
+    
+    .setCursorPosition:
+        mov     ah, 0x02    ; Mode number
+        mov     bh, 0       ; Page number = 0
+        int     0x10
+    
+    .plotChar:
+        mov     ch, 0       ; Clear high
+        mov     ah, 0x09    ; Mode number
+        mov     bl, al      ; Attribute
+        mov     bh, 0       ; Page number = 0
+        mov     al, 0x00    ; Display null char
+        int     0x10
+    
     .end:
         popa
         ret
