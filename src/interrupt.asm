@@ -76,6 +76,17 @@ parseIntNumber:
     case 0x05
         call    draw_drawLineVert
         break
+    
+    ; Draw an outlined box on the screen
+    ; PARAM:
+    ;   al = color
+    ;   bh = width
+    ;   bl = height
+    ;   ch = xPos
+    ;   cl = yPos
+    case 0x06
+        call    draw_drawOutlinedBox
+        break
 
     @@:
     break

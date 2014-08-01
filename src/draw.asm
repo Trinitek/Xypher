@@ -102,10 +102,11 @@ draw_drawFilledBox:
 
 ; 'draw_drawLineHoriz'
 ; Draws a horizontal line from an origin point on the leftmost side
-; al = color
-; cl = length
-; dl = xPos
-; dh = yPos
+; PARAM:
+;   al = color
+;   cl = length
+;   dl = xPos
+;   dh = yPos
 draw_drawLineHoriz:
     pusha
         
@@ -154,10 +155,11 @@ draw_drawLineHoriz:
         
 ; 'draw_drawLineVert'
 ; Draws a vertical line from an origin point on the topmost side
-; al = color
-; cl = length
-; dl = xPos
-; dh = yPos
+; PARAM:
+;   al = color
+;   cl = length
+;   dl = xPos
+;   dh = yPos
 draw_drawLineVert:
     pusha
     
@@ -217,3 +219,109 @@ draw_drawLineVert:
     .end:
         popa
         ret
+
+; 'draw_drawOutlinedBox'
+; Draws an outlined box on the screen
+; PARAM:
+;   al = color
+;   bh = width
+;   bl = height
+;   ch = xPos
+;   cl = yPos
+draw_drawOutlinedBox:
+    pusha
+    
+    ; if (xPos > SCREEN_WIDTH_MAX) then exit
+    .checkXpos:
+        cmp     ch, SCREEN_WIDTH_MAX
+        ja      .end
+
+    ; if (yPos > SCREEN_HEIGHT_MAX) then exit
+    .checkYpos:
+        cmp     cl, SCREEN_HEIGHT_MAX
+        ja      .end
+        
+    ; if (width+xPos > SCREEN_WIDTH) then resize
+    .checkWidth:
+        xor     dx, dx
+        mov     dl, bh
+        push    cx
+        mov     cl, ch
+        mov     ch, 0
+        add     dx, cx
+        pop     cx
+        cmp     dx, SCREEN_WIDTH
+        jb      @f
+
+        ; width = width - (total - SCREEN_WIDTH)
+        sub     dx, SCREEN_WIDTH
+        sub     bh, dl
+        @@:
+
+    ; if (height+yPos > SCREEN_HEIGHT) then resize
+    .checkHeight:
+        xor     dx, dx
+        mov     dl, bl
+        push    cx
+        mov     ch, 0
+        add     dx, cx
+        pop     cx
+        cmp     dx, SCREEN_HEIGHT
+        jb      @f
+
+        ; height = height - (total - SCREEN_HEIGHT)
+        sub     dx, SCREEN_HEIGHT
+        sub     bl, dl
+        @@:
+        
+    .prepareForDrawing:
+        ; dl = xPos
+        ; dh = yPos
+        mov     dx, cx
+        xchg    dh, dl
+        
+        ; set cursor position
+        push    bx
+        mov     ah, 0x02    ; Mode number
+        mov     bh, 0       ; Page number = 0
+        int     0x10
+        pop     bx
+        
+        ; clear cx for use as an iteration counter
+        xor     cx, cx
+    
+    .top:
+        mov     cl, bh      ; Length = width
+                            ; xPos = origin
+                            ; yPos = origin
+        call    draw_drawLineHoriz
+    
+    .bottom:
+                            ; Length = width
+                            ; xPos = origin
+        push    dx          ; yPos = yPos + height - 1
+        add     dh, bl      ; if (xPos > SCREEN_HEIGHT_MAX) goto next
+        dec     dh
+        cmp     dh, SCREEN_HEIGHT_MAX
+        ja      @f
+        call    draw_drawLineHoriz
+        @@:
+        pop     dx
+    
+    .left:
+        mov     cl, bl      ; Length = height
+                            ; xPos = origin
+                            ; yPos = origin
+        call    draw_drawLineVert
+    
+    .right:
+                            ; Length = height
+        add     dl, bh      ; xPos = xPos + width - 1
+        dec     dl
+                            ; yPos = origin
+        call    draw_drawLineVert
+    
+    .end:
+        popa
+        ret
+        
