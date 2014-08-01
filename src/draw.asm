@@ -243,6 +243,7 @@ draw_drawOutlinedBox:
         
     ; if (width+xPos > SCREEN_WIDTH) then resize
     .checkWidth:
+        mov     ah, 0       ; clear ah to hold 'out of bounds' flags
         xor     dx, dx
         mov     dl, bh
         push    cx
@@ -256,6 +257,8 @@ draw_drawOutlinedBox:
         ; width = width - (total - SCREEN_WIDTH)
         sub     dx, SCREEN_WIDTH
         sub     bh, dl
+        ; set bit 0 of ah
+        add     ah, 00000010b
         @@:
 
     ; if (height+yPos > SCREEN_HEIGHT) then resize
@@ -272,6 +275,8 @@ draw_drawOutlinedBox:
         ; height = height - (total - SCREEN_HEIGHT)
         sub     dx, SCREEN_HEIGHT
         sub     bl, dl
+        ; set bit 1 of ah
+        add     ah, 00000001b
         @@:
         
     .prepareForDrawing:
@@ -281,11 +286,13 @@ draw_drawOutlinedBox:
         xchg    dh, dl
         
         ; set cursor position
+        push    ax
         push    bx
         mov     ah, 0x02    ; Mode number
         mov     bh, 0       ; Page number = 0
         int     0x10
         pop     bx
+        pop     ax
         
         ; clear cx for use as an iteration counter
         xor     cx, cx
@@ -300,10 +307,10 @@ draw_drawOutlinedBox:
                             ; Length = width
                             ; xPos = origin
         push    dx          ; yPos = yPos + height - 1
-        add     dh, bl      ; if (xPos > SCREEN_HEIGHT_MAX) goto next
+        add     dh, bl      ; if (verticalResized == true) goto next
         dec     dh
-        cmp     dh, SCREEN_HEIGHT_MAX
-        ja      @f
+        shr     ah, 1
+        jc      @f
         call    draw_drawLineHoriz
         @@:
         pop     dx
@@ -317,9 +324,12 @@ draw_drawOutlinedBox:
     .right:
                             ; Length = height
         add     dl, bh      ; xPos = xPos + width - 1
-        dec     dl
+        dec     dl          ; if (horizontalResized == true) goto next
+        shr     ah, 1
+        jc      @f
                             ; yPos = origin
         call    draw_drawLineVert
+        @@:
     
     .end:
         popa
