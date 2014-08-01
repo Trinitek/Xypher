@@ -59,12 +59,22 @@ parseIntNumber:
     
     ; Draw a horizontal line on the screen
     ; PARAM:
-    ; al = color
-    ; cl = length
-    ; dl = xPos
-    ; dh = yPos
+    ;   al = color
+    ;   cl = length
+    ;   dl = xPos
+    ;   dh = yPos
     case 0x04
         call    draw_drawLineHoriz
+        break
+
+    ; Draw a vertical line on the screen
+    ; PARAM:
+    ;   al = color
+    ;   cl = length
+    ;   dl = xPos
+    ;   dh = yPos
+    case 0x05
+        call    draw_drawLineVert
         break
 
     @@:

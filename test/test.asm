@@ -146,7 +146,7 @@ main:
         os_clearScreen
     
     .displayHorizontalLines:
-        ; Plot a 40 long line at (1,2) with color (black on l_gray)
+        ; Plot a 40 long horizontal line at (1,2) with color (black on l_gray)
         mov     ah, 0x04
         mov     al, 0x70
         mov     dl, 1
@@ -155,7 +155,7 @@ main:
         int     0x45
         os_printString testString
         
-        ; Plot a 10 long line at (45, 18) with color (white on red)
+        ; Plot a 10 long horizontal line at (45, 18) with color (white on red)
         mov     ah, 0x04
         mov     al, 0x4F
         mov     dl, 45
@@ -164,7 +164,7 @@ main:
         int     0x45
         os_printString testString
         
-        ; Plot a 15 long line at (72, 15) with color (white on blue)
+        ; Plot a 15 long horizontal line at (72, 15) with color (white on blue)
         mov     ah, 0x04
         mov     al, 0x1F
         mov     dl, 72
@@ -173,7 +173,7 @@ main:
         int     0x45
         os_printString testString
         
-        ; Plot a 4 long line at (0, 0) with color (black on yellow)
+        ; Plot a 4 long horizontal line at (0, 0) with color (black on yellow)
         mov     ah, 0x04
         mov     al, 0xE0
         mov     dl, 0
@@ -186,5 +186,43 @@ main:
         os_clearScreen
     
     .displayVerticalLines:
+        ; Plot a 40 long vertical line at (1,2) with color (black on l_gray)
+        mov     ah, 0x05
+        mov     al, 0x70
+        mov     dl, 1
+        mov     dh, 2
+        mov     cl, 40
+        int     0x45
+        os_printString testString
+        
+        ; Plot a 10 long vertical line at (45, 18) with color (white on red)
+        mov     ah, 0x05
+        mov     al, 0x4F
+        mov     dl, 45
+        mov     dh, 18
+        mov     cl, 10
+        int     0x45
+        os_printString testString
+        
+        ; Plot a 15 long vertical line at (72, 15) with color (white on blue)
+        mov     ah, 0x05
+        mov     al, 0x1F
+        mov     dl, 72
+        mov     dh, 15
+        mov     cl, 15
+        int     0x45
+        os_printString testString
+        
+        ; Plot a 4 long vertical line at (0, 0) with color (black on yellow)
+        mov     ah, 0x05
+        mov     al, 0xE0
+        mov     dl, 0
+        mov     dh, 0
+        mov     cl, 4
+        int     0x45
+        os_printString testString
+    
+        os_waitForKey
+        os_clearScreen
 
     return

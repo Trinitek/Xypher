@@ -101,7 +101,7 @@ draw_drawFilledBox:
         ret
 
 ; 'draw_drawLineHoriz'
-; Draws a vertical line from an origin point on the leftmost side
+; Draws a horizontal line from an origin point on the leftmost side
 ; al = color
 ; cl = length
 ; dl = xPos
@@ -147,6 +147,72 @@ draw_drawLineHoriz:
         mov     bh, 0       ; Page number = 0
         mov     al, 0x00    ; Display null char
         int     0x10
+    
+    .end:
+        popa
+        ret
+        
+; 'draw_drawLineVert'
+; Draws a vertical line from an origin point on the topmost side
+; al = color
+; cl = length
+; dl = xPos
+; dh = yPos
+draw_drawLineVert:
+    pusha
+    
+    ; if (xPos > SCREEN_WIDTH_MAX) then exit
+    .checkXpos:
+        cmp     dl, SCREEN_WIDTH_MAX
+        ja      .end
+    
+    ; if (yPos > SCREEN_HEIGHT_MAX) then exit
+    .checkYpos:
+        cmp     dh, SCREEN_HEIGHT_MAX
+        ja      .end
+    
+    ; if (height+xPos > SCREEN_HEIGHT) then resize
+    .checkHeight:
+        xor     bx, bx
+        mov     bl, cl
+        push    dx
+        mov     dl, dh
+        mov     dh, 0
+        add     bx, dx
+        pop     dx
+        cmp     bx, SCREEN_HEIGHT
+        jb      @f
+        
+        ; height = height - (total - SCREEN_HEIGHT)
+        sub     bx, SCREEN_HEIGHT
+        sub     cl, bl
+        @@:
+    
+    ;.prepareForDrawing:
+        mov     ch, 0       ; Will be used as iteration counter
+        mov     bh, 0       ; Page number = 0
+        mov     bl, al      ; Attribute
+        mov     al, 0x00    ; Display null character
+        
+        
+    .nextRow:
+        ; set cursor position
+        mov     ah, 0x02    ; Mode number
+        int     0x10
+        
+        ; draw the pixel
+        push    cx
+        mov     cl, 1       ; Iterate once
+        mov     ah, 0x09    ; Mode number
+        int     0x10
+        pop     cx
+        
+        ; update cursor coordinates
+        ; yPos++
+        inc     dh
+        ; if (height == 0) then exit
+        ; height--
+        loop    .nextRow
     
     .end:
         popa
